@@ -10,6 +10,7 @@ const DemoList: React.FC<DemoListProps> = (props) => {
       <FlatList
         data={data}
         renderItem={(info) => <ListItem {...info.item} key={info.index} />}
+        keyExtractor={(item, i) => i.toString()}
       />
     </View>
   );
