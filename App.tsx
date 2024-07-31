@@ -10,7 +10,6 @@ import { DummyData } from "./src/db/DummyData";
 
 const App = () => {
   const [Todos, setTodos] = useState<DummyData[]>([]);
-  const [text, setText] = useState("");
   useEffect(() => {
     db.onChange(setTodos);
   }, []);
@@ -27,9 +26,6 @@ const App = () => {
         <CustomTextInput
           className="bg-white p-3 rounded-lg border-black"
           placeholder="enter Text ..."
-          onChange={(e) => {
-            setText(e.nativeEvent.text);
-          }}
           onSubmit={onSubmit}
         />
         <ScrollView className="flex-1 mt-1">
