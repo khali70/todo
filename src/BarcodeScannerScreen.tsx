@@ -31,8 +31,44 @@ const BarcodeScannerScreen = ({ navigation }: HomeScreenNavigationProps) => {
     data,
     ...props
   }: BarcodeScanningResult) => {
+    /**
+     * BarcodeScanningResult
+     {
+  "type": 256,
+  "data": "exp://192.168.1.13:8081",
+  "target": 109,
+  "raw": "exp://192.168.1.13:8081",
+  "cornerPoints": [
+    {
+      "y": 251.37777709960938,
+      "x": 119.82221984863281
+    },
+    {
+      "y": 353.4222106933594,
+      "x": 123.02222442626953
+    },
+    {
+      "y": 351.28887939453125,
+      "x": 189.5111083984375
+    },
+    {
+      "y": 251.37777709960938,
+      "x": 189.5111083984375
+    }
+  ],
+  "boundingBox": {
+    "size": {
+      "width": 102.04444122314453,
+      "height": 69.68888854980469
+    },
+    "origin": {
+      "y": 119.82221984863281,
+      "x": 251.37777709960938
+    }
+  }
+} 
+     */
     setScanned(true);
-    console.log(JSON.stringify({ type, data, ...props }, null, 2));
     navigation.replace("Home", { barcode: data, type });
   };
 
