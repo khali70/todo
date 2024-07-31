@@ -9,9 +9,10 @@ import CustomTextInput from "../textInput";
 
 const TodoItem = ({ title, color_tag, id, created_at }: DummyData) => {
   const [editing, setEditing] = React.useState(false);
-  const onEditSubmit = () => {
-    db.update(id, { title });
-    setEditing(false);
+  const onEditSubmit = (text) => {
+    db.update(id, { title: text }).then(() => {
+      setEditing(false);
+    });
   };
   const Title = () => {
     if (editing) {
