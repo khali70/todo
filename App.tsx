@@ -1,83 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import {
-  NavigationContainer,
-  ParamListBase,
-  useRoute,
-} from "@react-navigation/native";
-import {
-  StackScreenProps,
-  createStackNavigator,
-} from "@react-navigation/stack";
-import { Ionicons } from "@expo/vector-icons";
-import BarcodeScannerScreen from "@/BarcodeScannerScreen";
-import { RootStackParamList } from "./types";
-
-const Stack = createStackNavigator<RootStackParamList>();
-
-type HomeScreenNavigationProps = StackScreenProps<RootStackParamList, "Home">;
-const HomeScreen = ({ navigation, route }: HomeScreenNavigationProps) => {
-  const [text, setText] = useState(route?.params?.barcode || "");
-
-  const openBarcodeScanner = () => {
-    navigation.replace("BarcodeScanner");
-  };
-
-  const handleSearch = () => {
-    console.log("Searching for:", text);
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <TouchableOpacity onPress={openBarcodeScanner}>
-          <Ionicons name="barcode-outline" size={30} color="#000" />
-        </TouchableOpacity>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Enter text"
-          value={text}
-          onChangeText={setText}
-        />
-        <TouchableOpacity onPress={handleSearch}>
-          <Ionicons name="search-outline" size={30} color="#000" />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-};
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
+import { ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { black_accent } from "./src/colors";
+import CustomTextInput from "./src/components/textInput";
+import TodoItem from "./src/components/todo";
+import db from "./src/db/DB";
+import { DummyData } from "./src/db/DummyData";
 
 const App = () => {
+  const [Todos, setTodos] = useState<DummyData[]>([]);
+  const [text, setText] = useState("");
+  useEffect(() => {
+    db.onChange(setTodos);
+  }, []);
+  const onSubmit = (text) => {
+    db.add({
+      title: text,
+      color_tag: "default",
+    });
+  };
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="BarcodeScanner" component={BarcodeScannerScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <StatusBar style="light" backgroundColor={black_accent} />
+      <SafeAreaView className="bg-red-300 flex-1 px-3 pt-3">
+        <CustomTextInput
+          className="bg-white p-3 rounded-lg border-black"
+          placeholder="enter Text ..."
+          onChange={(e) => {
+            setText(e.nativeEvent.text);
+          }}
+          onSubmit={onSubmit}
+        />
+        <ScrollView className="flex-1 mt-1">
+          {Todos.map((todo) => (
+            <TodoItem key={todo.id} {...todo} />
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
-  },
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 10,
-    elevation: 3,
-  },
-  textInput: {
-    flex: 1,
-    marginHorizontal: 10,
-    fontSize: 18,
-  },
-});
 
 export default App;
