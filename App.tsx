@@ -5,19 +5,20 @@ import { black_accent } from "./src/colors";
 import CustomTextInput from "./src/components/textInput";
 import TodoList from "@/components/todoList";
 import db from "./src/db/DB";
+import { useCallback } from "react";
 
 const App = () => {
   
-  const onSubmit = (text) => {
+  const onSubmit = useCallback((text) => {
     db.add({
       title: text,
       color_tag: "default",
     });
-  };
+  },[]);
   return (
     <>
-      <StatusBar style="light" backgroundColor={black_accent} />
-      <SafeAreaView className="bg-red-300 flex-1 px-3 pt-3">
+      <SafeAreaView className="bg-red-300 flex-1 px-3 pt-6">
+      <StatusBar style="dark" backgroundColor={black_accent} animated />
         <CustomTextInput
           className="bg-white p-3 rounded-lg border-black"
           placeholder="enter Text ..."
