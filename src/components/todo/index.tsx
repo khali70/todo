@@ -50,6 +50,7 @@ const TodoItem = ({ title, color_tag, id, created_at }: DummyData) => {
     <View className="flex-row">
       {Object.entries(COLOR_TAGS).map(([k, v], i) => (
         <TouchableOpacity
+          key={k}
           className="rounded"
           onPress={() => {
             db.update(id, { color_tag: k as DummyData["color_tag"] });
