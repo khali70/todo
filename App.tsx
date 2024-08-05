@@ -1,18 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import { black_accent } from "./src/colors";
 import CustomTextInput from "./src/components/textInput";
-import TodoItem from "./src/components/todo";
+import TodoList from "@/components/todoList";
 import db from "./src/db/DB";
-import { DummyData } from "./src/db/DummyData";
 
 const App = () => {
-  const [Todos, setTodos] = useState<DummyData[]>([]);
-  useEffect(() => {
-    db.onChange(setTodos);
-  }, []);
+  
   const onSubmit = (text) => {
     db.add({
       title: text,
@@ -28,11 +23,7 @@ const App = () => {
           placeholder="enter Text ..."
           onSubmit={onSubmit}
         />
-        <ScrollView className="flex-1 mt-1">
-          {Todos.map((todo) => (
-            <TodoItem key={todo.id} {...todo} />
-          ))}
-        </ScrollView>
+       <TodoList/>
       </SafeAreaView>
     </>
   );
